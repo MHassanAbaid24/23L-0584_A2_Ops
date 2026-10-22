@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Upload{% endblock %}
+{% block content %}
+<section class="card hero">
+  <h1>Is this image AI-generated?</h1>
+  <p class="muted">Upload a picture and VisionGuard estimates whether it was made by a generative model or is a real
+    (non-generated) image. The image is analysed in memory and is not stored.</p>
+
+  <form class="upload" action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+    <label class="dropzone" for="image">
+      <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp" required>
+      <span class="dz-title">Choose an image</span>
+      <span class="dz-hint">JPEG, PNG, WEBP, GIF or BMP · up to {{ '%g' % max_upload_mb }} MB</span>
+      <span class="dz-file" id="chosen"></span>
+    </label>
+    <button type="submit" class="btn">Analyse image</button>
+  </form>
+</section>
+
+<section class="card note">
+  <h2>Before you trust the verdict</h2>
+  <ul>
+    <li>The model was trained on fewer than 1,000 web images (art, portraits, animals, landscapes). It is right
+      about 4 times out of 5 on held-out test images.</li>
+    <li>It is tuned to avoid calling a real image fake, so it misses some AI images, especially photorealistic portraits.</li>
+    <li>Paintings, heavy filters, screenshots and tiny thumbnails confuse it. Treat the result as a hint, not proof.</li>
+  </ul>
+</section>
+<script>
+  document.getElementById('image').addEventListener('change', e => {
+    document.getElementById('chosen').textContent = e.target.files[0] ? e.target.files[0].name : '';
+  });
+</script>
+{% endblock %}

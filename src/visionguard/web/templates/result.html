@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Result #{{ r.id }}{% endblock %}
+{% block content %}
+{% set is_ai = r.label == 'ai' %}
+<section class="card result {{ 'is-ai' if is_ai else 'is-real' }}">
+  <div class="result-grid">
+    <div class="preview">
+      {% if preview %}
+        <img src="{{ preview }}" alt="Uploaded image preview">
+      {% else %}
+        <div class="no-preview">Image not stored<br><small>(only the verdict is kept)</small></div>
+      {% endif %}
+      <p class="muted small">{{ r.filename }} · {{ r.image_format }} · {{ r.width }}×{{ r.height }}
+        · {{ '%.0f' % (r.file_size / 1024) }} KB</p>
+    </div>
+    <div class="verdict">
+      <p class="eyebrow">Verdict #{{ r.id }}</p>
+      <h1>{{ 'Likely AI-generated' if is_ai else 'Likely real' }}</h1>
+      <div class="meter" role="img" aria-label="Confidence {{ '%.0f' % (r.confidence * 100) }} percent">
+        <div class="meter-fill" style="width: {{ '%.1f' % (r.confidence * 100) }}%"></div>
+      </div>
+      <p class="confidence"><strong>{{ '%.1f' % (r.confidence * 100) }}%</strong> confidence</p>
+      <dl class="facts">
+        <dt>P(AI-generated)</dt><dd>{{ '%.3f' % r.p_ai }}</dd>
+        <dt>Decision threshold</dt><dd>{{ '%.3f' % r.threshold }} (above → AI)</dd>
+        <dt>Model</dt><dd>{{ r.model_name }} v{{ r.model_version }}</dd>
+        <dt>Inference</dt><dd>{{ '%.0f' % r.latency_ms }} ms · {{ r.source }}</dd>
+        <dt>Time (UTC)</dt><dd>{{ r.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="caveat">
+    <strong>Honest caveat:</strong>
+    {% if r.confidence < 0.7 %}
+      the model is not sure about this one, so the verdict is close to a coin flip. Do not rely on it.
+    {% else %}
+      this is a statistical guess from a small model trained on fewer than 1,000 images, and it is wrong about 1 time in 5.
+    {% endif %}
+    {% if not is_ai %} It misses some photorealistic AI images, so "likely real" is not a guarantee.{% endif %}
+    Never use this result as the only evidence against someone.
+  </div>
+  <div class="actions">
+    <a class="btn" href="{{ url_for('index') }}">Analyse another image</a>
+    <a class="btn ghost" href="{{ url_for('history') }}">View history</a>
+  </div>
+</section>
+{% endblock %}

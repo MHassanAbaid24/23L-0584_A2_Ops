@@ -29,3 +29,6 @@ venv/
 .DS_Store
 /outputs/
 mlflow.db
+
+# local web-app database
+/instance/

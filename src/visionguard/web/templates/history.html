@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}History{% endblock %}
+{% block content %}
+<section class="card">
+  <div class="history-head">
+    <h1>Prediction history</h1>
+    <p class="muted">{{ total }} prediction{{ '' if total == 1 else 's' }} ·
+      {{ stats.get('ai', 0) }} AI · {{ stats.get('real', 0) }} real · newest first</p>
+  </div>
+  {% if rows %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>#</th><th>When (UTC)</th><th>File</th><th>Decision</th><th>Confidence</th><th>P(AI)</th>
+          <th>Threshold</th><th>Model</th><th>Latency</th><th>Source</th></tr>
+      </thead>
+      <tbody>
+      {% for r in rows %}
+        <tr>
+          <td><a href="{{ url_for('result', record_id=r.id) }}">{{ r.id }}</a></td>
+          <td class="nowrap">{{ r.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+          <td class="file" title="{{ r.filename }}">{{ r.filename }}<br><small class="muted">{{ r.image_format }}
+            {{ r.width }}×{{ r.height }}</small></td>
+          <td><span class="pill {{ r.label }}">{{ 'AI-generated' if r.label == 'ai' else 'Real' }}</span></td>
+          <td>{{ '%.1f' % (r.confidence * 100) }}%</td>
+          <td>{{ '%.3f' % r.p_ai }}</td>
+          <td>{{ '%.3f' % r.threshold }}</td>
+          <td class="nowrap" title="{{ r.model_name }}">{{ r.model_name | replace('23L-0584_A2_Ops_', '') }} <small class="muted">v{{ r.model_version }}</small></td>
+          <td>{{ '%.0f' % r.latency_ms }} ms</td>
+          <td>{{ r.source }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <nav class="pager">
+    {% if page > 1 %}<a class="btn ghost" href="{{ url_for('history', page=page - 1) }}">← Newer</a>{% endif %}
+    <span class="muted">Page {{ page }} of {{ pages }}</span>
+    {% if page < pages %}<a class="btn ghost" href="{{ url_for('history', page=page + 1) }}">Older →</a>{% endif %}
+  </nav>
+  {% else %}
+  <p class="empty">No predictions yet. <a href="{{ url_for('index') }}">Upload an image</a> to create the first one.</p>
+  {% endif %}
+</section>
+{% endblock %}
