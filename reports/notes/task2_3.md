@@ -105,7 +105,8 @@ palette), a single earring or a colour patch, i.e. local texture and colour rath
 - Tags on both: `git_commit`, `git_dirty`, `dvc_data_md5` (8f23d6dc…, from `data/raw.dvc`), `dvc_data_nfiles`, `seed`.
 - Manual (E0): 30 params describing the experiment (backbone, img_size, augment, resize_mode, fine_tune_lr,
   dataset sizes, TF/Keras versions, threshold), per-epoch metrics for all 35 epochs including the lr, test metrics.
-- Autolog (E1): 31 params, but they describe `fit()` and the optimizer (opt_beta_1, opt_epsilon, shuffle,
+- Autolog (E1): 31 params, but they describe `fit()` and the optimizer (opt_name, opt_learning_rate, shuffle,
+  validation_split; `epochs=20, initial_epoch=0` come from the FIRST fit() call only,
   validation_steps…). It knows nothing about the data, backbone, augmentation or image size. It adds
   a TensorBoard log, model summary and checkpoints automatically. Missed: the second `fit()` call (fine-tuning)
   restarts its step counter, so the per-epoch history shows only the 20 stage-1 epochs; the threshold and test
