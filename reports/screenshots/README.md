@@ -26,7 +26,7 @@ each screenshot shows; ✅ = usable as is, ⚠️ = usable but weak, see note.
 | Needed | Sub-task | How to capture |
 |---|---|---|
 | Toy repo on DagsHub (web) | 1.4 toy "commit both versions (dagshub)" | Browser: `https://dagshub.com/MHassanAbaid24/23L-0584_A2_Ops_dvc_toy` → Commits tab and `toy.csv` with its DVC badge; address bar visible. |
-| Project DVC apply (terminal) | 1.4 apply | In the project folder: `git --no-pager log --oneline --decorate -6; cat data/raw.dvc; dvc status -c; date` |
+| Project DVC apply (terminal) | 1.4 apply | `bash labs/task1_evidence.sh` → screenshot the terminal (save as `task1/1.4_apply_01_project_dvc.png`). |
 | Project dataset on DagsHub (web) | 1.4 apply | Browser: `https://dagshub.com/MHassanAbaid24/23L-0584_A2_Ops` → `data/raw` folder showing it is DVC-tracked (975 files). |
 | Audit summary (optional) | 1.2 | `sed -n 1,30p reports/audit/summary.md`. The report can use the generated table directly. |
 
