@@ -11,8 +11,10 @@ venv/
 .ruff_cache/
 *.egg-info/
 
-# data & models (versioned with DVC, not git)
-/data/
+# data & models: versioned with DVC (DVC writes its own data/.gitignore for tracked outputs)
+/data/*
+!/data/*.dvc
+!/data/.gitignore
 /models/
 *.keras
 *.h5
