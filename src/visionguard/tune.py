@@ -130,8 +130,13 @@ def main(argv=None) -> None:
     df.to_csv(c.out / "visionguard_results.csv", index=False)
     (c.out / "visionguard_results.md").write_text("\n".join([
         f"# VisionGuard tuner results ({c.backbone}, {len(df)} trials, RandomSearch, objective max val_auc)", "",
-        df.to_markdown(index=False, floatfmt=".4f"), "", "## Sensitivity (spread of mean val_auc per value)", "",
-        imp.to_markdown(index=False, floatfmt=".4f"), "", f"Best hyperparameters: `{json.dumps(best)}`", ""]))
+        df.assign(fine_tune_lr=df.fine_tune_lr.map("{:g}".format), val_auc=df.val_auc.map("{:.4f}".format))
+        .to_markdown(index=False, disable_numparse=True), "",
+        "## Sensitivity (spread of mean val_auc per value)", "",
+        imp.assign(best_value=imp.best_value.map("{:g}".format),
+                   mean_auc_spread=imp.mean_auc_spread.map("{:.4f}".format))
+        .to_markdown(index=False, disable_numparse=True), "",
+        f"Best hyperparameters: `{json.dumps(best)}`", ""]))
     print(df.to_string(index=False))
     print(imp.to_string(index=False))
     print(f"BEST: {best}")
