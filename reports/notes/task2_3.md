@@ -109,7 +109,8 @@ palette), a single earring or a colour patch, i.e. local texture and colour rath
   validation_split; `epochs=20, initial_epoch=0` come from the FIRST fit() call only,
   validation_steps…). It knows nothing about the data, backbone, augmentation or image size. It adds
   a TensorBoard log, model summary and checkpoints automatically. Missed: the second `fit()` call (fine-tuning)
-  restarts its step counter, so the per-epoch history shows only the 20 stage-1 epochs; the threshold and test
+  restarts its step counter, so the per-epoch history shows only the 20 stage-1 epochs, and its `learning_rate`
+  metric stays at the stage-1 value 0.001 (E0 logs the real final 1e-5); the threshold and test
   metrics only exist because the training code logs them explicitly.
 - Conclusion: autolog is good for zero-effort optimizer/fit details; manual logging is needed for anything that
   defines the experiment and for multi-stage training.
