@@ -46,6 +46,27 @@ These notes record the facts and numbers. Rewrite them in your own words for the
   Resizing every image to one fixed size and training on decoded pixels (never metadata) limits this,
   and the error analysis in Task 2.6 checks for it.
 
+### Report text for 1.3 (ready to paste)
+
+**Figure 1.1 — Twelve random images per class (top two rows: AI-generated, bottom two rows: real), seed 42.**
+The AI-generated images are mostly highly saturated digital art: psychedelic patterns, painterly portraits and
+stylised animals with very smooth textures. The "real" class is more varied than its name suggests. Besides
+photographs, it contains magazine covers, video thumbnails with letterboxing and photos of real paintings, so the
+model must learn "made by a generator" vs "not made by a generator", not "art" vs "photo". Text overlays and
+borders appear in both classes, so the model cannot rely on them as a cue.
+
+**Figure 1.2 — Per-class histograms of width, height, file size (log scale) and aspect ratio.**
+AI images bunch at a few generator output sizes, which is why the width histogram has a tall spike near 1024 px.
+Real images are spread across a much wider range, from small web thumbnails to 8495-px camera originals.
+The real class also has a cluster of tiny files (47 real images under 20 KB vs 15 AI images) and fewer PNGs
+(8% vs 20%). Both classes have a median aspect ratio of 1.5, but square images are almost three times as common
+in the AI class (22% vs 8%).
+
+**Implication for modelling.** These size, format and shape differences are shortcuts. A model could score well
+by learning "small, heavily compressed JPEG ⇒ real" instead of real generation artefacts. To reduce this risk, every
+image is decoded from its bytes and resized to one fixed input size, file metadata is never given to the model,
+and the error analysis in Task 2.6 checks whether mistakes concentrate on thumbnails or on unusual aspect ratios.
+
 ## 1.4 DVC
 
 - Toy lab: run `bash labs/dvc_toy_lab.sh` from the project root. It pauses after each step for a screenshot

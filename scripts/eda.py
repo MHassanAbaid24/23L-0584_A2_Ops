@@ -44,7 +44,7 @@ def histograms(df: pd.DataFrame, out: Path) -> None:
     specs = [("width", "Width (px)", True), ("height", "Height (px)", True),
              ("file_size_kb", "File size (KB)", True), ("aspect_ratio", "Aspect ratio (w/h)", False)]
     fig, axes = plt.subplots(1, 4, figsize=(20, 4.2))
-    for ax, (col, label, logx) in zip(axes, specs):
+    for ax, (col, label, logx) in zip(axes, specs, strict=True):
         values = df[col]
         bins = (np.logspace(np.log10(values.min()), np.log10(values.max()), 40) if logx
                 else np.linspace(values.min(), min(values.max(), 3), 40))

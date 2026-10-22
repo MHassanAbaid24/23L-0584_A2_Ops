@@ -52,9 +52,9 @@ step "3. Change the data -> version 2, commit again"
 printf '4,castle.png,ai\n5,beach.jpg,real\n' >> toy.csv
 run cat toy.csv
 run dvc add toy.csv
-run git diff toy.csv.dvc     # only the hash and size in the pointer changed
+run git --no-pager diff toy.csv.dvc     # only the hash and size in the pointer changed
 run git commit -am "Update toy.csv to v2 (5 rows)"
-run git log --oneline
+run git --no-pager log --oneline
 pause
 
 step "4. Return to the older version (v1), then back to v2"
@@ -102,5 +102,5 @@ run dvc checkout toy.csv
 pause
 
 step "Done — see https://dagshub.com/$DAGSHUB_USER/$REPO"
-run git log --oneline --graph
+run git --no-pager log --oneline --graph --decorate
 run git status --short                   # clean: nothing left uncommitted

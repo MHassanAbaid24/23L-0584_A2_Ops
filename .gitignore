@@ -18,12 +18,14 @@ venv/
 *.h5
 
 # experiment outputs
-mlruns/
-mlartifacts/
-tuner/
-checkpoints/
+/mlruns/
+/mlartifacts/
+/tuner/
+/checkpoints/
 
 # editor / os
 .vscode/
 .idea/
 .DS_Store
+/outputs/
+mlflow.db
