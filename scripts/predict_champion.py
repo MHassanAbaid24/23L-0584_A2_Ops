@@ -20,7 +20,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("image", type=Path)
     parser.add_argument("--tracking", choices=("local", "dagshub"), default="dagshub")
-    parser.add_argument("--name", required=True)
+    parser.add_argument("--name", default="23L-0584_A2_Ops_visionguard")
     parser.add_argument("--alias", default="champion")
     args = parser.parse_args()
 

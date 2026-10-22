@@ -1,0 +1,11 @@
+path,label,class,p_ai,pred,width,height,file_size,format,mode,true,predicted,aspect,file_kb
+RealArt/_MG_5812.jpg,0,real,0.97814864,1,2500,1667,890920,JPEG,RGB,real,ai,1.5,870.0
+AiArtData/240201-airec-main-ksp-5625e8.jpg,1,ai,0.05869872,0,760,380,184317,JPEG,RGB,ai,real,2.0,180.0
+AiArtData/midjourney-putin.jpg,1,ai,0.07635648,0,1024,576,384765,JPEG,RGB,ai,real,1.78,375.7
+RealArt/images108.jpg,0,real,0.88320446,1,300,168,12216,JPEG,RGB,real,ai,1.79,11.9
+AiArtData/ath-flowers-vivid-colors-generative-ai-landscape-painting-mountain-281590810.jpg,1,ai,0.13958466,0,897,1690,256267,JPEG,RGB,ai,real,0.53,250.3
+AiArtData/Group_12467.jpg,1,ai,0.14953345,0,1548,776,92925,JPEG,RGB,ai,real,1.99,90.7
+AiArtData/3e9bc32a-1d77-4f0a-b0df-199c80060385-1024x1024.jpg,1,ai,0.1775715,0,1024,1024,114819,JPEG,RGB,ai,real,1.0,112.1
+AiArtData/earing-a-yellow-kimono-in-a-beautiful-and-foggy-tropical-greenh-copy-800x800.jpg,1,ai,0.1862066,0,800,800,48900,JPEG,RGB,ai,real,1.0,47.8
+RealArt/many-happy-diverse-ethnicity-different-260nw-1733872811.jpg,0,real,0.775193,1,520,280,61851,JPEG,RGB,real,ai,1.86,60.4
+AiArtData/chayka_ai_copyright.jpg,1,ai,0.22661015,0,1500,1500,653217,JPEG,RGB,ai,real,1.0,637.9

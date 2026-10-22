@@ -84,7 +84,7 @@ def main() -> None:
         .to_csv(a.run_dir / "errors_table.csv", index=False)
     cols = 5
     rows = max(1, int(np.ceil(len(wrong) / cols)))
-    fig, axes = plt.subplots(rows, cols, figsize=(cols * 3.2, rows * 3.6), squeeze=False)
+    fig, axes = plt.subplots(rows, cols, figsize=(cols * 3.2, rows * 4.0), squeeze=False)
     for ax in axes.ravel():
         ax.axis("off")
     for ax, r in zip(axes.ravel(), wrong.itertuples(), strict=False):

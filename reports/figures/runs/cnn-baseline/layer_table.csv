@@ -1,0 +1,22 @@
+layer,type,output_shape,params,trainable
+image,InputLayer,"(None, 224, 224, 3)",0,True
+rescale_0_1,Rescaling,"(None, 224, 224, 3)",0,True
+conv1,Conv2D,"(None, 224, 224, 32)",864,True
+bn1,BatchNormalization,"(None, 224, 224, 32)",128,True
+relu1,Activation,"(None, 224, 224, 32)",0,True
+pool1,MaxPooling2D,"(None, 112, 112, 32)",0,True
+conv2,Conv2D,"(None, 112, 112, 64)",18432,True
+bn2,BatchNormalization,"(None, 112, 112, 64)",256,True
+relu2,Activation,"(None, 112, 112, 64)",0,True
+pool2,MaxPooling2D,"(None, 56, 56, 64)",0,True
+conv3,Conv2D,"(None, 56, 56, 128)",73728,True
+bn3,BatchNormalization,"(None, 56, 56, 128)",512,True
+relu3,Activation,"(None, 56, 56, 128)",0,True
+pool3,MaxPooling2D,"(None, 28, 28, 128)",0,True
+conv4,Conv2D,"(None, 28, 28, 256)",294912,True
+bn4,BatchNormalization,"(None, 28, 28, 256)",1024,True
+relu4,Activation,"(None, 28, 28, 256)",0,True
+pool4,MaxPooling2D,"(None, 14, 14, 256)",0,True
+gap,GlobalAveragePooling2D,"(None, 256)",0,True
+dropout,Dropout,"(None, 256)",0,True
+p_ai,Dense,"(None, 1)",257,True

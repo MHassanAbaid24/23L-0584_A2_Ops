@@ -63,9 +63,20 @@ def serving_config(run_id: str) -> dict[str, object]:
         return json.load(config_file)
 
 
+def logged_model_uri(run) -> str:
+    """MLflow 3 stores models as LoggedModels; register via models:/<model_id> (DagsHub cannot resolve
+    runs:/<id>/model for them)."""
+    models = mlflow.search_logged_models(experiment_ids=[run.info.experiment_id], output_format="list")
+    ready = [m for m in models if m.source_run_id == run.info.run_id and m.name == "model"
+             and str(m.status).endswith("READY")]
+    if not ready:
+        raise RuntimeError(f"No READY logged model named 'model' for run {run.info.run_id}.")
+    return f"models:/{ready[-1].model_id}"
+
+
 def register_run(client: MlflowClient, name: str, run):
     existing = version_for_run(client, name, run.info.run_id)
-    model_version = existing or mlflow.register_model(f"runs:/{run.info.run_id}/model", name)
+    model_version = existing or mlflow.register_model(logged_model_uri(run), name)
     model_version = wait_until_ready(client, name, model_version.version)
     config = serving_config(run.info.run_id)
     tags = {key: str(run.data.metrics[key]) for key in METRIC_TAGS if key in run.data.metrics}
