@@ -11,10 +11,8 @@ venv/
 .ruff_cache/
 *.egg-info/
 
-# data & models: versioned with DVC (DVC writes its own data/.gitignore for tracked outputs)
-/data/*
-!/data/*.dvc
-!/data/.gitignore
+# data/ and models/ are versioned with DVC: `dvc add` writes their own .gitignore files
+# (a root-level rule here would hide the .dvc pointers from DVC's repo scan)
 /models/
 *.keras
 *.h5
