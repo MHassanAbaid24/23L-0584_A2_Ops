@@ -20,15 +20,14 @@ each screenshot shows; ✅ = usable as is, ⚠️ = usable but weak, see note.
 | `task1/1.4_toy_07a_delete_data_cache_pull.png` | 1.4 toy | Data file and the whole local cache deleted (`ls -la` proves it), then `dvc pull` restores v2 from DagsHub, and v1 after checking out the old pointer. | timestamp 14:47:53 | ✅ Key evidence for "delete local data and pull back". |
 | `task1/1.4_toy_07b_pull_v1_restore_v2.png` | 1.4 toy | Continuation: v1 pulled from the remote, then the workspace returned to v2. | none (scrolled) | ⚠️ Mostly overlaps 07a; use only if 07a is cropped. |
 | `task1/1.4_toy_08_final_commit_graph.png` | 1.4 toy | Final history: 4 commits, `main` in sync with `origin/main` on DagsHub. | none (pager) | ⚠️ No prompt or time. |
-| `task1/1.4_toy_09_dagshub_repo.png` | 1.4 toy | The toy repo on DagsHub: 4 commits pushed, `toy.csv` shown with a `dvc` badge (data in DagsHub storage, only `toy.csv.dvc` in Git). | repo owner + name; no address bar or date | ⚠️ Content is right; see the retake note below. |
+| `task1/1.4_toy_09_dagshub_repo.png` | 1.4 toy | The toy repo on DagsHub: 4 commits pushed, `toy.csv` shown with a `dvc` badge (data in DagsHub storage, only `toy.csv.dvc` in Git). | address bar `dagshub.com/MHassanAbaid24/23L-0584_A2_Ops_dvc_toy`, clock Oct 22 16:15 | ✅ |
 | `task1/1.4_apply_01_project_dvc.png` | 1.4 apply | The project's Git history, the `data/raw.dvc` pointer (md5, 503,783,378 bytes, 975 files), DVC's `data/.gitignore`, proof that images and `config.local` are git-ignored, the DagsHub remote, and cache ↔ remote in sync. | user@host, timestamp 16:12:12 | ✅ Main evidence for 1.4 apply. |
-| `task1/1.4_apply_02_dagshub_data_folder.png` | 1.4 apply | DagsHub project `23L-0584_A2_Ops`, connected to GitHub: `data/raw` carries the `dvc` badge, while Git holds only `raw.dvc` and `.gitignore`. | repo owner + name, "Connected to github…"; no address bar or date | ⚠️ Content is right; see the retake note below. |
+| `task1/1.4_apply_02_dagshub_data_folder.png` | 1.4 apply | DagsHub project `23L-0584_A2_Ops`, connected to GitHub: `data/raw` carries the `dvc` badge, while Git holds only `raw.dvc` and `.gitignore`. | address bar `…/23L-0584_A2_Ops/src/main/data`, clock Oct 22 16:15 | ✅ |
 
 ### Still missing / to improve for Task 1
 
 | Item | Sub-task | Action |
 |---|---|---|
-| Browser context on the two DagsHub screenshots | 1.4 | Optional retake: capture the whole screen (Print Screen → "Screen") so the address bar and GNOME's top-bar clock are visible. Otherwise state the URL and time in the caption. |
 | Audit summary (optional) | 1.2 | `sed -n 1,30p reports/audit/summary.md`. The report can use the generated table directly. |
 
 To avoid the pager problem in later screenshots, use `git --no-pager …`. The toy script has been updated to do this.
