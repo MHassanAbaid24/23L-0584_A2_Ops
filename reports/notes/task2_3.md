@@ -93,7 +93,7 @@ palette), a single earring or a colour patch, i.e. local texture and colour rath
 
 ## 3.1 / 3.2 MLflow toy and DagsHub
 
-- `labs/mlflow_toy.py`: MNIST dense net, two runs (lr 1e-3 → val acc 0.872, lr 1e-2 → 0.9105); params, per-epoch
+- `labs/mlflow_toy.py`: MNIST dense net, two runs per target. Local (5 epochs): lr 1e-3 → val acc 0.8965, lr 1e-2 → 0.907; the lr 1e-2 curves show val loss rising after epoch 4 (early overfitting). DagsHub (2 epochs): 0.872 vs 0.9105; params, per-epoch
   metrics via a Keras callback, `curves.png`, model. Local (`sqlite:///mlflow.db`) and DagsHub (experiment `toy-mnist`).
 - Definitions (write your own): experiment = named group of runs for one question; run = one execution of
   training code; parameter = an input setting fixed for the run; metric = a numeric result, possibly per step;

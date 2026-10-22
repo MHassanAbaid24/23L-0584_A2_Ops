@@ -31,3 +31,21 @@ each screenshot shows; ✅ = usable as is, ⚠️ = usable but weak, see note.
 | Audit summary (optional) | 1.2 | `sed -n 1,30p reports/audit/summary.md`. The report can use the generated table directly. |
 
 To avoid the pager problem in later screenshots, use `git --no-pager …`. The toy script has been updated to do this.
+
+## Task 2
+
+| File | Sub-task | Suggested caption | Proof | Assessment |
+|---|---|---|---|---|
+| `task2/2.2_cnn_model_summary_1.png` | 2.2 | Baseline CNN summary, part 1: input, rescaling and the first conv blocks with output shapes and parameter counts. | VS Code terminal prompt, clock 18:07 | ✅ |
+| `task2/2.2_cnn_model_summary_2.png` | 2.2 | Part 2: the last conv blocks, GAP, dropout, sigmoid output; total 390,113 parameters (389,153 trainable). | prompt, clock 18:08 | ✅ |
+
+## Task 3
+
+| File | Sub-task | Suggested caption | Proof | Assessment |
+|---|---|---|---|---|
+| `task3/3.1_toy_two_local_runs_terminal.png` | 3.1 | `labs/mlflow_toy.py --target local`: two runs, lr 0.001 (val acc 0.8965) and lr 0.01 (0.907), with their run ids. | prompt, clock 18:09 | ✅ |
+| `task3/3.1_local_ui_runs_list.png` | 3.1 | Local MLflow UI, experiment `toy-mnist`: both runs, each with a logged model. | address bar 127.0.0.1:5000, clock 18:12 | ✅ |
+| `task3/3.1_local_run_lr0.01_overview.png` | 3.1 | Run `lr-0.01`: 6 parameters, 4 final metrics, tags `lab`, `target`, `author`; source `mlflow_toy.py` at commit d133853. | address bar, clock 18:13 | ✅ Good for the parameter/metric/tag definitions. |
+| `task3/3.1_local_run_lr0.01_artifact_curves.png` | 3.1 | Artifact `curves.png`: train/val loss and accuracy per epoch; validation loss rises after epoch 4 (overfitting at lr 0.01). | address bar, clock 18:13 | ✅ |
+| `task3/3.1_local_compare_plot.png` | 3.1 | Compare view: parallel-coordinates plot of learning rate vs final training loss. | address bar, clock 18:14 | ✅ |
+| `task3/3.1_local_compare_params_metrics.png` | 3.1 | Compare view: only `learning_rate` differs (highlighted); lr 0.01 reaches val acc 0.907 vs 0.896 and val loss 0.332 vs 0.34. | address bar, clock 18:14 | ✅ |
