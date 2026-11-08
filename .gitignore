@@ -32,3 +32,7 @@ mlflow.db
 
 # local web-app database
 /instance/
+
+# report build intermediates
+/report/build/
+/report/*.pdf

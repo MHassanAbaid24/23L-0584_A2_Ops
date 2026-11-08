@@ -211,7 +211,12 @@ def run(a: argparse.Namespace) -> dict:
 
     # ---- log results + artifacts --------------------------------------------------------------------
     if tracking:
-        numeric = {k: float(v) for k, v in results.items() if isinstance(v, int | float)}
+        # Keras already logs val_accuracy/val_precision/val_recall once per epoch (at threshold 0.5). MLflow shows the
+        # value with the highest step, so final thresholded values under the same names would be hidden by the last
+        # epoch. Log them as val_thr_* instead; metrics.json keeps the plain names.
+        collide = {"val_accuracy", "val_precision", "val_recall"}
+        numeric = {("val_thr_" + k[4:] if k in collide else k): float(v)
+                   for k, v in results.items() if isinstance(v, int | float)}
         mlflow.log_metrics(numeric)
         mlflow.log_param("threshold", t) if a.logging == "manual" else mlflow.set_tag("threshold", f"{t:.4f}")
         for name in figs:
