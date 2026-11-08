@@ -69,3 +69,31 @@ To avoid the pager problem in later screenshots, use `git --no-pager …`. The t
 | `task3/3.6_registry_version3_champion.png` | 3.6 | Version 3 page: source run E5-mobilenetv2, alias champion, description with val/test ROC-AUC and threshold 0.6725. | address bar, clock 18:32 | ✅ |
 | `task3/3.6_registry_version3_tags.png` | 3.6 | Version 3 tags scrolled: test_f1, test_roc_auc, threshold, val_f1, val_roc_auc. | address bar, clock 18:32 | ✅ Complements the previous one. |
 | `task3/3.6_predict_by_alias_terminal.png` | 3.6 | `scripts/predict_champion.py` loads `models:/23L-0584_A2_Ops_visionguard@champion` (v3) from DagsHub: RealArt/images37.jpg → real (confidence 0.978), AiArtData/sddefault.jpg → ai (0.733, threshold 0.6725). Loading takes ~10–12 s vs ~0.7 s to predict. | VS Code prompt, clock 18:33 | ✅ The load-time vs predict-time gap is the argument for loading once at start-up (4.1). |
+
+## Task 4
+
+Captured with a headless Chromium driven against the real app (gunicorn, debug off, champion v3, local SQLite) on
+Sun 08 Nov 2026 12:40–12:43 PKT. A headless browser has no address bar or clock, so a strip at the top of each image
+states the real URL, capture time, user@host and project. Terminal items are rendered transcripts of commands actually
+run on this machine at the time shown. Say this once in the report's front matter.
+
+| File | Sub-task | Suggested caption | Proof | Assessment |
+|---|---|---|---|---|
+| `task4/4.1_inference_console_two_known_images.png` | 4.1 | `python -m visionguard.inference` loads the champion once (9.1 s cold start), then classifies two known images in ~0.3 s each: RealArt/images37.jpg → real (0.978), AiArtData/sddefault.jpg → ai (0.733). | prompt, `date` 12:42:39 PKT | ✅ The load vs predict gap shows why loading per request is unacceptable. |
+| `task4/4.2_reject_wrong_type_tiff.png` | 4.2 | A real photo saved as TIFF is rejected with **415 Unsupported Media Type**: the format is read from the bytes, and TIFF is not allowed. | URL strip, 12:42:04 | ✅ Failure case 1 (wrong type). |
+| `task4/4.2_reject_too_large_17mb.png` | 4.2 | A 17 MB PNG is rejected with **413** before the body is read (limit 10 MB from `MAX_UPLOAD_MB`). | URL strip, 12:42:07 | ✅ Failure case 2 (size). |
+| `task4/4.2_reject_undecodable_fake_jpg.png` | 4.2 | A text file named `vacation.jpg` is rejected with **400**: "looks like an image but cannot be decoded". | URL strip, 12:42:10 | ✅ Failure case 3 (undecodable). |
+| `task4/4.3_upload_page.png` | 4.3 | Upload page: file picker limited to JPEG/PNG/WEBP/GIF/BMP up to 10 MB; Upload / History / Health menu. | URL strip, 12:40:57 | ✅ |
+| `task4/4.3_result_real_correct.png` | 4.3 | A real test photo → "Likely real", 99.6% confidence, P(AI) 0.004, threshold 0.673, model v3, honest caveat. | URL strip, 12:41:35 | ✅ |
+| `task4/4.3_result_ai_correct.png` | 4.3 | A Midjourney collage → "Likely AI-generated", 99.8%. | URL strip, 12:41:38 | ✅ |
+| `task4/4.3_result_ai_borderline.png` | 4.3 | An AI image just above the threshold → AI-generated at 68.5% (P(AI) 0.685 vs 0.673). Shows what a low-confidence verdict looks like. | URL strip, 12:41:47 | ✅ |
+| `task4/4.3_result_ai_missed.png` | 4.3 | An AI image the model **misses** → "Likely real" 92.4%. The caveat warns about exactly this kind of photorealistic fake. | URL strip, 12:41:50 | ✅ Good for an honest discussion; also in the 2.6 error analysis. |
+| `task4/4.4_health_check_json.png` | 4.4 | `/health`: status ok, database ok, `debug: false`, model v3 from run E5-mobilenetv2, threshold 0.6725, 224 px, loaded in 1.97 s. | URL strip, 12:42:22 | ✅ |
+
+## Task 5
+
+| File | Sub-task | Suggested caption | Proof | Assessment |
+|---|---|---|---|---|
+| `task5/5_history_page_via_menu.png` | 5 | History opened from the menu: 7 predictions (3 AI, 4 real), newest first, each with UTC time, file, decision, confidence, P(AI), threshold, model + version, latency and source. | URL strip, 12:42:20 | ✅ Answers "what, when, which model, how confidently". |
+| `task5/5_history_record_7_detail.png` | 5 | Clicking id 7 in history reopens that stored record at `/result/7`. | URL strip, 12:42:22 | ✅ |
+| `task5/5_db_query_predictions_table.png` | 5 | Direct `sqlite3` query of the `predictions` table, its schema (indexes on label and created_at), and `ls instance/` showing only the database: no uploaded images on disk. | prompt, `date` 12:42:50 PKT | ✅ Row 1 duplicates row 2: a real repeated upload from the capture session. |
