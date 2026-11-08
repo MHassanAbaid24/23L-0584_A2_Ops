@@ -91,8 +91,9 @@ def build(api_url: str, live_url: str) -> Path:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--api-url", default="not deployed yet (Task 7)")
-    ap.add_argument("--live-url", default="not deployed yet (Task 7)")
+    ap.add_argument("--api-url", default="https://23l-0584-a2-ops.vercel.app/api/predict (health: /api/health)")
+    ap.add_argument("--live-url", default=("https://23l-0584-a2-ops.vercel.app/api/health — public model API; "
+                                           "the Flask UI runs on localhost by design (Task 7) and calls it"))
     a = ap.parse_args()
     build(a.api_url, a.live_url)
 
