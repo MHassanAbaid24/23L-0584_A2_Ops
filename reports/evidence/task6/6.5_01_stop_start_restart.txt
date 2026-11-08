@@ -1,0 +1,21 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:29:37 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose stop web
+ Container vg-23l-0584-web-1  Stopping
+ Container vg-23l-0584-web-1  Stopped
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose ps -a
+NAME                IMAGE                        COMMAND                  SERVICE   CREATED          STATUS                              PORTS
+vg-23l-0584-db-1    postgres:16-alpine           "docker-entrypoint.s…"   db        49 seconds ago   Up 48 seconds (healthy)             5432/tcp
+vg-23l-0584-web-1   23l-0584-a2-ops-web:latest   "gunicorn -c gunicor…"   web       49 seconds ago   Exited (0) Less than a second ago   
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose start web
+ Container vg-23l-0584-db-1  Waiting
+ Container vg-23l-0584-db-1  Healthy
+ Container vg-23l-0584-web-1  Starting
+ Container vg-23l-0584-web-1  Started
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose restart db
+ Container vg-23l-0584-db-1  Restarting
+ Container vg-23l-0584-db-1  Started
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose ps
+NAME                IMAGE                        COMMAND                  SERVICE   CREATED              STATUS                    PORTS
+vg-23l-0584-db-1    postgres:16-alpine           "docker-entrypoint.s…"   db        About a minute ago   Up 16 seconds (healthy)   5432/tcp
+vg-23l-0584-web-1   23l-0584-a2-ops-web:latest   "gunicorn -c gunicor…"   web       About a minute ago   Up 16 seconds (healthy)   0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp

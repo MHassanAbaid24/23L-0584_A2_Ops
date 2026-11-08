@@ -1,0 +1,9 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun Nov  8 02:28:20 PM PKT 2026
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker exec vg-warmup sh -c 'whoami; hostname; cat /etc/os-release | head -n 2; ls /usr/share/nginx/html; nginx -v'
+root
+6cac3d9ac167
+NAME="Alpine Linux"
+ID=alpine
+index.html
+nginx version: nginx/1.31.8

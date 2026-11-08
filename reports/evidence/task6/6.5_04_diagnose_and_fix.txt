@@ -1,0 +1,20 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:30:40 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose logs --no-log-prefix db 2>&1 | grep -E "FATAL|DETAIL" | tail -n 4
+2026-11-08 09:30:33.882 UTC [118] FATAL:  password authentication failed for user "visionguard"
+2026-11-08 09:30:33.882 UTC [118] DETAIL:  Connection matched file "/var/lib/postgresql/data/pg_hba.conf" line 128: "host all all all scram-sha-256"
+2026-11-08 09:30:39.722 UTC [126] FATAL:  password authentication failed for user "visionguard"
+2026-11-08 09:30:39.722 UTC [126] DETAIL:  Connection matched file "/var/lib/postgresql/data/pg_hba.conf" line 128: "host all all all scram-sha-256"
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec db psql -U visionguard -d visionguard -tAc 'select 1 as db_is_up'
+1
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose up -d --no-deps web
+ Container vg-23l-0584-web-1  Recreate
+ Container vg-23l-0584-web-1  Recreated
+ Container vg-23l-0584-web-1  Starting
+ Container vg-23l-0584-web-1  Started
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose ps
+NAME                IMAGE                        COMMAND                  SERVICE   CREATED          STATUS                        PORTS
+vg-23l-0584-db-1    postgres:16-alpine           "docker-entrypoint.s…"   db        2 minutes ago    Up About a minute (healthy)   5432/tcp
+vg-23l-0584-web-1   23l-0584-a2-ops-web:latest   "gunicorn -c gunicor…"   web       16 seconds ago   Up 15 seconds (healthy)       0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ curl -s http://localhost:8000/health
+{"database":"ok","debug":false,"model":{"img_size":224,"load_seconds":2.59,"model_name":"23L-0584_A2_Ops_visionguard","model_version":"3","resize_mode":"stretch","source_run":"E5-mobilenetv2","threshold":0.6725000143051147},"status":"ok"}

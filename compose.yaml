@@ -1,0 +1,43 @@
+# VisionGuard stack (Task 6.3): the Flask web app + PostgreSQL. Start with:  docker compose up -d --build
+# Passwords come from the untracked .env file next to this file (template: .env.example). Compose reads .env only
+# to fill the ${…} placeholders below; each service receives just the variables listed under its `environment`.
+name: vg-23l-0584
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: visionguard
+      POSTGRES_USER: visionguard
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data      # named volume: data survives `down`/rebuilds (not `down -v`)
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U visionguard -d visionguard"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
+    # No `ports:` on purpose: the database is reachable only from other services on the internal network (as db:5432).
+
+  web:
+    build: .
+    image: 23l-0584-a2-ops-web:latest
+    depends_on:
+      db:
+        condition: service_healthy           # wait for pg_isready, not just for the container to start
+    environment:
+      DATABASE_URL: postgresql+psycopg://visionguard:${POSTGRES_PASSWORD}@db:5432/visionguard
+      MODEL_PATH: /app/models/champion.keras
+      SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-10}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+    volumes:
+      - ./models:/app/models:ro              # champion.keras + serving_config.json, mounted read-only (not baked in)
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:

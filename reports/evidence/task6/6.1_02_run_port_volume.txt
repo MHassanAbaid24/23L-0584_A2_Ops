@@ -1,0 +1,16 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun Nov  8 02:28:19 PM PKT 2026
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ mkdir -p /tmp/vg-warmup-site
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ printf '%s\n' '<h1>23L-0584_A2_Ops docker warm-up</h1>' > /tmp/vg-warmup-site/index.html
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ cat /tmp/vg-warmup-site/index.html
+<h1>23L-0584_A2_Ops docker warm-up</h1>
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run -d --name vg-warmup -p 8081:80 -v /tmp/vg-warmup-site:/usr/share/nginx/html:ro nginx:alpine
+6cac3d9ac167c3e831c51d85d49b34226109bbdb04978ae19be8aa669e948c66
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker ps --filter name=vg-warmup
+CONTAINER ID   IMAGE          COMMAND                  CREATED                  STATUS                  PORTS                                     NAMES
+6cac3d9ac167   nginx:alpine   "/docker-entrypoint.…"   Less than a second ago   Up Less than a second   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   vg-warmup
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ curl -s http://localhost:8081/
+<h1>23L-0584_A2_Ops docker warm-up</h1>
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker port vg-warmup
+80/tcp -> 0.0.0.0:8081
+80/tcp -> [::]:8081

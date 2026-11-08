@@ -1,0 +1,25 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ date
+Sun Nov  8 02:10:19 PM PKT 2026
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ git log --oneline
+835bbfe Add CI toy with deliberate failing test
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ gh run list --limit 5
+completed	failure	Add CI toy with deliberate failing test	CI	main	push	42465926045	13s	2026-11-08T09:08:52Z
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ gh run view 42465926045 | grep -E 'Triggered via|X test \(3\.(11|12)\)'
+Triggered via push about 1 minute ago
+X test (3.12) in 9s (ID 128685316439)
+X test (3.11) in 7s (ID 128685316631)
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ gh run view 42465926045 --log-failed | grep -E 'FAILED|assert|AssertionError|Error' | head -n 15
+test (3.12)	Run pytest -v	2026-11-08T09:09:02.0279482Z test_calc.py::test_adds_integers FAILED                                  [ 25%]
+test (3.12)	Run pytest -v	2026-11-08T09:09:02.0405203Z >       assert add(2, 2) == 5  # deliberate bug for the red run
+test (3.12)	Run pytest -v	2026-11-08T09:09:02.0406358Z E       assert 4 == 5
+test (3.12)	Run pytest -v	2026-11-08T09:09:02.0407568Z test_calc.py:7: AssertionError
+test (3.12)	Run pytest -v	2026-11-08T09:09:02.0412206Z FAILED test_calc.py::test_adds_integers - assert 4 == 5
+test (3.11)	Run pytest -v	2026-11-08T09:09:02.0887404Z test_calc.py::test_adds_integers FAILED                                  [ 25%]
+test (3.11)	Run pytest -v	2026-11-08T09:09:02.1007425Z >       assert add(2, 2) == 5  # deliberate bug for the red run
+test (3.11)	Run pytest -v	2026-11-08T09:09:02.1007901Z E       assert 4 == 5
+test (3.11)	Run pytest -v	2026-11-08T09:09:02.1008381Z test_calc.py:7: AssertionError
+test (3.11)	Run pytest -v	2026-11-08T09:09:02.1009045Z FAILED test_calc.py::test_adds_integers - assert 4 == 5

@@ -1,5 +1,7 @@
 # 23L-0584_A2_Ops — VisionGuard
 
+[![CI](https://github.com/MHassanAbaid24/23L-0584_A2_Ops/actions/workflows/ci.yml/badge.svg)](https://github.com/MHassanAbaid24/23L-0584_A2_Ops/actions/workflows/ci.yml)
+
 VisionGuard is a web service that classifies an uploaded image as **AI-generated** or **real**.
 
 - Model: TensorFlow/Keras, trained on [AI Generated Images vs Real Images](https://www.kaggle.com/datasets/cashbowman/ai-generated-images-vs-real-images)
@@ -21,3 +23,9 @@ gunicorn -c gunicorn.conf.py "visionguard.web:create_app()"        # http://loca
 
 Pages: `/` upload · `/history` · `/result/<id>` · `/health`. Settings come from environment variables
 (see `.env.example`). Debug mode is never enabled; the app always runs under gunicorn.
+
+## Tests
+
+```bash
+pytest -q
+```

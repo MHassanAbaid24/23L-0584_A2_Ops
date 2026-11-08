@@ -1,0 +1,15 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun Nov  8 02:28:19 PM PKT 2026
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ printf '%s\n' '<p>edited on the host</p>' | tee -a /tmp/vg-warmup-site/index.html
+<p>edited on the host</p>
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ curl -s http://localhost:8081/
+<h1>23L-0584_A2_Ops docker warm-up</h1>
+<p>edited on the host</p>
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker volume create vg-warmup-data
+vg-warmup-data
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm -v vg-warmup-data:/data alpine sh -c 'echo persisted > /data/note.txt'
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm -v vg-warmup-data:/data alpine cat /data/note.txt
+persisted
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker volume ls --filter name=vg-warmup
+DRIVER    VOLUME NAME
+local     vg-warmup-data

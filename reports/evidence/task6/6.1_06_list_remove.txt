@@ -1,0 +1,23 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun Nov  8 02:28:21 PM PKT 2026
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker ps -a --filter name=vg-warmup
+CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS        PORTS                                     NAMES
+6cac3d9ac167   nginx:alpine   "/docker-entrypoint.…"   2 seconds ago   Up 1 second   0.0.0.0:8081->80/tcp, [::]:8081->80/tcp   vg-warmup
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker stop vg-warmup
+vg-warmup
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker rm vg-warmup
+vg-warmup
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker ps -a --filter name=vg-warmup
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker volume rm vg-warmup-data
+vg-warmup-data
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker rmi alpine
+Untagged: alpine:latest
+Untagged: alpine@sha256:3f4d6b32e26703c6082839234f43769d5046b3ac7c910033911d1e71d8cd630a
+Deleted: sha256:3ea06e4cb95e726ea6c6cc4377570ac4c4050d78710004cbd631ca809daf7e8e
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker images alpine
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE   ID             DISK USAGE   CONTENT SIZE   EXTRA
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ rm -rf /tmp/vg-warmup-site
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ test ! -e /tmp/vg-warmup-site && echo 'Removed /tmp/vg-warmup-site'
+Removed /tmp/vg-warmup-site

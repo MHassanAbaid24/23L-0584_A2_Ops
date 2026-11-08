@@ -1,0 +1,21 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:29:18 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose port db 5432
+:0
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker inspect -f db PortBindings={{json .HostConfig.PortBindings}}  ExposedPorts={{json .Config.ExposedPorts}} vg-23l-0584-db-1
+db PortBindings={}  ExposedPorts={"5432/tcp":{}}
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker inspect -f web PortBindings={{json .HostConfig.PortBindings}} vg-23l-0584-web-1
+web PortBindings={"8000/tcp":[{"HostIp":"","HostPort":"8000"}]}
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker ps --format '{{.Names}}  {{.Ports}}' | grep -E 'vg-23l-0584|:5432'
+vg-23l-0584-web-1  0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+vg-23l-0584-db-1  5432/tcp
+96c5633e585b_votesphere-db  0.0.0.0:5432->5432/tcp, [::]:5432->5432/tcp
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec web python -c "import socket; s=socket.create_connection(('db', 5432), timeout=3); print('from web container: db:5432 reachable ->', s.getpeername())"
+from web container: db:5432 reachable -> ('172.22.0.2', 5432)
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec web python -c "import os; print('DATABASE_URL host part:', os.environ['DATABASE_URL'].split('@')[1])"
+DATABASE_URL host part: db:5432/visionguard
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker network inspect -f {{range .Containers}}{{.Name}} {{.IPv4Address}}  {{end}} vg-23l-0584_default
+vg-23l-0584-web-1 172.22.0.3/16  vg-23l-0584-db-1 172.22.0.2/16  
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker volume ls --filter name=vg-23l-0584
+DRIVER    VOLUME NAME
+local     vg-23l-0584_pgdata

@@ -1,0 +1,11 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ date
+Sun Nov  8 02:11:25 PM PKT 2026
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ gh run list --limit 5
+completed	success	Fix deliberately failing test	CI	main	push	42466069364	15s	2026-11-08T09:10:48Z
+completed	failure	Add CI toy with deliberate failing test	CI	main	push	42465926045	13s	2026-11-08T09:08:52Z
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/ci-toy$ gh run view 42466069364 | grep -E 'Triggered via|✓ test \(3\.(11|12)\)'
+Triggered via push less than a minute ago
+✓ test (3.11) in 10s (ID 128685761073)
+✓ test (3.12) in 11s (ID 128685761231)

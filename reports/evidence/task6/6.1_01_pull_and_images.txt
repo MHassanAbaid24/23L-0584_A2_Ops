@@ -1,0 +1,24 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun Nov  8 02:28:17 PM PKT 2026
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker pull nginx:alpine
+alpine: Pulling from library/nginx
+Digest: sha256:713fc2ebfd92e8217db451477182ee91944b123d2b1ee9fd5a8c6e91ca6c3a11
+Status: Image is up to date for nginx:alpine
+docker.io/library/nginx:alpine
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker images nginx
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE          ID             DISK USAGE   CONTENT SIZE   EXTRA
+nginx:alpine   7cac34a4d72b         63MB             0B        
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker image history nginx:alpine --format 'table {{.CreatedBy}}\t{{.Size}}' | head -n 12
+CREATED BY                                      SIZE
+RUN /bin/sh -c set -x     && apkArch="$(cat …   50.2MB
+ENV ACME_VERSION=0.4.1                          0B
+ENV NJS_RELEASE=1                               0B
+ENV NJS_VERSION=1.0.2                           0B
+CMD ["nginx" "-g" "daemon off;"]                0B
+STOPSIGNAL SIGQUIT                              0B
+EXPOSE map[80/tcp:{}]                           0B
+ENTRYPOINT ["/docker-entrypoint.sh"]            0B
+COPY 30-tune-worker-processes.sh /docker-ent…   4.62kB
+COPY 20-envsubst-on-templates.sh /docker-ent…   3.03kB
+COPY 15-local-resolvers.envsh /docker-entryp…   389B

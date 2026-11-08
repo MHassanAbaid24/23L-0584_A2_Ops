@@ -1,0 +1,24 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:29:56 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ curl -s -o /dev/null -w "POST /predict from host -> HTTP %{http_code}\n" -F "image=@data/raw/AiArtData/midjourney20images.jpg" http://localhost:8000/predict
+POST /predict from host -> HTTP 200
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose logs --no-log-prefix --tail 4 web
+127.0.0.1 - - [08/Nov/2026:09:29:50 +0000] "GET /health HTTP/1.1" 200 239 "-" "Python-urllib/3.12"
+127.0.0.1 - - [08/Nov/2026:09:29:55 +0000] "GET /health HTTP/1.1" 200 239 "-" "Python-urllib/3.12"
+2026-11-08 09:29:57,268 INFO visionguard.web: prediction id=1 file=midjourney20images.jpg label=ai conf=0.998 total=405ms
+172.22.0.1 - - [08/Nov/2026:09:29:57 +0000] "POST /predict HTTP/1.1" 200 29449 "-" "curl/8.5.0"
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose logs --no-log-prefix --tail 3 db
+2026-11-08 09:29:41.053 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-08 09:29:41.057 UTC [29] LOG:  database system was shut down at 2026-11-08 09:29:40 UTC
+2026-11-08 09:29:41.064 UTC [1] LOG:  database system is ready to accept connections
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec web sh -c "whoami; pwd; ls /app/models"
+app
+/app
+champion.keras
+serving_config.json
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec db psql -U visionguard -d visionguard -c "select id, created_at, filename, label, round(confidence::numeric,3) as conf, model_name, model_version, source from predictions order by id desc limit 5;"
+ id |          created_at           |        filename        | label | conf  |         model_name          | model_version | source 
+----+-------------------------------+------------------------+-------+-------+-----------------------------+---------------+--------
+  1 | 2026-11-08 09:29:57.262638+00 | midjourney20images.jpg | ai    | 0.998 | 23L-0584_A2_Ops_visionguard | 3             | local
+(1 row)
+

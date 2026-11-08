@@ -1,0 +1,21 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:28:23 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker images 23l-0584-a2-ops-web:latest
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE                        ID             DISK USAGE   CONTENT SIZE   EXTRA
+23l-0584-a2-ops-web:latest   23744ad2f91a       1.73GB             0B        
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --entrypoint whoami 23l-0584-a2-ops-web:latest
+app
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --entrypoint id 23l-0584-a2-ops-web:latest
+uid=10001(app) gid=10001(app) groups=10001(app)
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --entrypoint ls 23l-0584-a2-ops-web:latest -a /app
+.
+..
+gunicorn.conf.py
+instance
+requirements-serve.txt
+src
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm -e TF_CPP_MIN_LOG_LEVEL=3 --entrypoint python 23l-0584-a2-ops-web:latest -c import tensorflow as tf, keras; print("tensorflow", tf.__version__, "| keras", keras.__version__, "| GPUs:", tf.config.list_physical_devices("GPU"))
+tensorflow 2.20.0 | keras 3.15.1 | GPUs: []
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker inspect --format {{json .Config.Healthcheck}} 23l-0584-a2-ops-web:latest
+{"Test":["CMD-SHELL","python -c \"import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=4).status == 200 else 1)\""],"Interval":30000000000,"Timeout":5000000000,"StartPeriod":90000000000,"Retries":3}
