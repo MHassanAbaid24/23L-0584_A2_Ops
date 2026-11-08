@@ -1,0 +1,33 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:35:03 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ gh run list --repo MHassanAbaid24/23L-0584_A2_Ops --limit 3
+completed	success	Task 6: Dockerfile (slim, deps-first, non-root, healthcheck), .docker…	CI	main	push	42467537562	3m11s	2026-11-08T09:31:26Z
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ gh run view 42467537562 --repo MHassanAbaid24/23L-0584_A2_Ops | grep -vE '^\s*$|Node.js 20|ubuntu-latest label|^- "|github.blog|runner-images' | head -n 25
+✓ main CI · 42467537562
+Triggered via push about 3 minutes ago
+JOBS
+✓ test in 52s (ID 128690423651)
+✓ docker in 2m12s (ID 128690633583)
+ANNOTATIONS
+test: .github#2
+test: .github#1
+docker: .github#2
+docker: .github#1
+ARTIFACTS
+MHassanAbaid24~23L-0584_A2_Ops~ARJR8L.dockerbuild
+For more information about a job, try: gh run view --job=<job-id>
+View this run on GitHub: https://github.com/MHassanAbaid24/23L-0584_A2_Ops/actions/runs/42467537562
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ gh run view 42467537562 --repo MHassanAbaid24/23L-0584_A2_Ops --log | grep -E 'All checks passed|passed in|naming to|exporting to image|DONE' | sed -E 's/^[^\t]*\t[^\t]*\t[0-9TZ:.-]+ //' | head -n 8
+All checks passed!
+#1 DONE 7.9s
+#1 DONE 0.0s
+#2 DONE 0.0s
+#3 DONE 0.4s
+#4 DONE 0.3s
+#5 DONE 0.0s
+#6 DONE 0.3s
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ grep -n 'badge' README.md
+3:[![CI](https://github.com/MHassanAbaid24/23L-0584_A2_Ops/actions/workflows/ci.yml/badge.svg)](https://github.com/MHassanAbaid24/23L-0584_A2_Ops/actions/workflows/ci.yml)
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ gh run view 42467537562 --repo MHassanAbaid24/23L-0584_A2_Ops --log | grep -E ' passed' | sed -E 's/^[^\t]*\t[^\t]*\t[0-9TZ:.-]+ //'
+All checks passed!
+14 passed, 2 warnings in 2.69s

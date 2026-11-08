@@ -33,6 +33,10 @@ services:
       SECRET_KEY: ${SECRET_KEY:?set SECRET_KEY in .env}
       MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-10}
       LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      # Task 8: INFERENCE_MODE=remote sends each (locally preprocessed) image to the cloud model API instead.
+      INFERENCE_MODE: ${INFERENCE_MODE:-local}
+      MODEL_API_URL: ${MODEL_API_URL:-}
+      MODEL_API_KEY: ${MODEL_API_KEY:-}
     volumes:
       - ./models:/app/models:ro              # champion.keras + serving_config.json, mounted read-only (not baked in)
     ports:

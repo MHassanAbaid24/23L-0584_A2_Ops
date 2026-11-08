@@ -19,6 +19,7 @@ from werkzeug.exceptions import HTTPException, RequestEntityTooLarge
 from werkzeug.utils import secure_filename
 
 from visionguard.inference import ImageInfo, InvalidImageError, Prediction, inspect_image
+from visionguard.remote import RemoteModelError, RemotePredictor
 from visionguard.web.config import Settings
 from visionguard.web.db import Database, PredictionRecord
 
@@ -70,9 +71,16 @@ def create_app(settings: Settings | None = None, predictor: Predictor | None = N
     db.create_schema()
 
     if predictor is None:
-        from visionguard.inference import ChampionModel
+        if settings.inference_mode == "remote":
+            model = RemotePredictor(
+                settings.model_api_url or "",
+                settings.model_api_key or "",
+                settings.model_api_timeout,
+            )
+        else:
+            from visionguard.inference import ChampionModel
 
-        model = ChampionModel(settings.model_path, settings.model_config_path, settings.threshold)
+            model = ChampionModel(settings.model_path, settings.model_config_path, settings.threshold)
         predictor = model
         log.info("model loaded once at start-up: %s", model.describe())
 
@@ -101,7 +109,15 @@ def create_app(settings: Settings | None = None, predictor: Predictor | None = N
             log.info("rejected upload %r: %s", filename, e)
             abort(415 if "Unsupported" in str(e) else 400, description=str(e))
         t0 = time.perf_counter()
-        pred = predictor.predict_bytes(data, info)
+        try:
+            pred = predictor.predict_bytes(data, info)
+        except RemoteModelError as error:
+            log.warning("remote prediction failed for %s: %s", filename, error)
+            title = "Model API rejected the key" if error.status_code == 502 else "Model service unavailable"
+            return (
+                render_template("error.html", code=error.status_code, title=title, message=str(error)),
+                error.status_code,
+            )
         record = db.add(PredictionRecord(
             filename=filename, image_format=info.format, width=info.width, height=info.height,
             file_size=info.size_bytes, label=pred.label, confidence=pred.confidence, p_ai=pred.p_ai,
@@ -128,9 +144,23 @@ def create_app(settings: Settings | None = None, predictor: Predictor | None = N
     @app.get("/health")
     def health():
         db_ok = db.ping()
-        body = {"status": "ok" if db_ok else "degraded", "model": predictor.describe(),
-                "database": "ok" if db_ok else "unreachable", "debug": app.debug}
-        return jsonify(body), 200 if db_ok else 503
+        api_ok = True
+        if settings.inference_mode == "remote":
+            api_ok = isinstance(predictor, RemotePredictor) and predictor.health_check(
+                min(settings.model_api_timeout, 2.0)
+            )
+        healthy = db_ok and api_ok
+        body = {
+            "status": "ok" if healthy else "degraded",
+            "model": predictor.describe(),
+            "database": "ok" if db_ok else "unreachable",
+            "debug": app.debug,
+            "inference_mode": settings.inference_mode,
+        }
+        if settings.inference_mode == "remote":
+            body["api_url"] = settings.model_api_url
+            body["api_health"] = api_ok
+        return jsonify(body), 200 if healthy else 503
 
     @app.errorhandler(HTTPException)
     def http_error(e: HTTPException):

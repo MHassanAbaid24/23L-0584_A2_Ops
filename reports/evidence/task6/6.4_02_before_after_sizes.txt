@@ -1,0 +1,30 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:32:52 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ diff docker/Dockerfile.before Dockerfile
+2,3c2
+< # Task 6.4 BASELINE ("before"): identical to ../Dockerfile except that pip keeps its download cache in the layer.
+< # Build from the project root: docker build -f docker/Dockerfile.before -t 23l-0584-a2-ops-web:before .
+---
+> # VisionGuard web app (Task 6.2). Build: docker build -t 23l-0584-a2-ops-web .
+29c28
+< RUN pip install -r requirements-serve.txt
+---
+> RUN pip install --no-cache-dir -r requirements-serve.txt
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker images 23l-0584-a2-ops-web
+WARNING: This output is designed for human readability. For machine-readable output, please use --format.
+IMAGE                        ID             DISK USAGE   CONTENT SIZE   EXTRA
+23l-0584-a2-ops-web:before   ecf53b30f13c        2.1GB             0B        
+23l-0584-a2-ops-web:latest   23744ad2f91a       1.73GB             0B   U    
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker image inspect -f '{{index .RepoTags 0}}  {{.Size}} bytes' 23l-0584-a2-ops-web:before 23l-0584-a2-ops-web:latest
+23l-0584-a2-ops-web:before  2097435883 bytes
+23l-0584-a2-ops-web:latest  1728429175 bytes
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker image history --format '{{.Size}}\t{{.CreatedBy}}' 23l-0584-a2-ops-web:before | grep 'pip install' | cut -c1-80
+1.98GB	/bin/sh -c pip install -r requirements-serve…
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker image history --format '{{.Size}}\t{{.CreatedBy}}' 23l-0584-a2-ops-web:latest | grep 'pip install' | cut -c1-80
+1.61GB	/bin/sh -c pip install --no-cache-dir -r req…
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --entrypoint sh 23l-0584-a2-ops-web:before -c 'du -sh /root/.cache/pip 2>/dev/null || du -sh /app/.cache/pip'
+du: cannot access '/app/.cache/pip': No such file or directory
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --user root --entrypoint du 23l-0584-a2-ops-web:before -sh /root/.cache/pip
+355M	/root/.cache/pip
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker run --rm --user root --entrypoint du 23l-0584-a2-ops-web:latest -sh /root/.cache/pip
+du: cannot access '/root/.cache/pip': No such file or directory
