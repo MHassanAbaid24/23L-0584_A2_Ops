@@ -1,0 +1,48 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:48:11 PM PKT
+
+$ curl deployed API contract cases (X-API-Key: $MODEL_API_KEY)
+## health (public production alias)
+{"img_size":224,"model_name":"23L-0584_A2_Ops_visionguard","model_version":"3","runtime":"tflite","source_run":"E5-mobilenetv2","status":"ok","threshold":0.6725000143051147}
+
+HTTP 200 total_s 0.644539
+
+## predict real image
+{"confidence":0.9402597658336163,"label":"real","latency_ms":12.771732000004477,"model_name":"23L-0584_A2_Ops_visionguard","model_version":"3","p_ai":0.05974023416638374,"runtime":"tflite","source_run":"E5-mobilenetv2","threshold":0.6725000143051147}
+
+HTTP 200 total_s 3.610686
+
+## predict AI image
+{"confidence":0.855620801448822,"label":"ai","latency_ms":11.048885000008113,"model_name":"23L-0584_A2_Ops_visionguard","model_version":"3","p_ai":0.855620801448822,"runtime":"tflite","source_run":"E5-mobilenetv2","threshold":0.6725000143051147}
+
+HTTP 200 total_s 2.933100
+
+## predict without key
+{"error":"Unauthorized."}
+
+HTTP 401 total_s 2.390130
+
+## predict wrong key
+{"error":"Unauthorized."}
+
+HTTP 401 total_s 2.311441
+
+## predict TIFF
+{"error":"Unsupported image format."}
+
+HTTP 415 total_s 0.994394
+
+## predict text as JPEG
+{"error":"Image could not be decoded."}
+
+HTTP 400 total_s 1.085976
+
+## predict image larger than 4 MB
+{"error":"Image exceeds the 4 MB limit."}
+
+HTTP 413 total_s 4.003042
+
+## GET predict (wrong method)
+{"error":"Method not allowed."}
+
+HTTP 405 total_s 0.420933

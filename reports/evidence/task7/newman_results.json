@@ -1,0 +1,2255 @@
+{
+  "collection": {
+    "_": {
+      "postman_id": "4d4d3faa-72c1-4b4b-a0e5-8d07bff55b04"
+    },
+    "item": [
+      {
+        "id": "e690bba8-e6e1-4245-ba94-f16f87016e82",
+        "name": "Health",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "health"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "70065417-de27-45cf-9df5-dc2a2d67c884",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                "const body = pm.response.json();",
+                "pm.test('returns health metadata', () => { pm.expect(body.status).to.eql('ok'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body.model_version).to.eql('3'); pm.expect(body.img_size).to.eql(224); });"
+              ],
+              "_lastExecutionId": "e3cdb9e9-95e8-46cd-a396-1301075b511c"
+            }
+          }
+        ]
+      },
+      {
+        "id": "1678d402-4f50-4e45-a8a0-edfdb1ccc24a",
+        "name": "Predict real image",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "{{apiKey}}"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/RealArt/spider-monkey-gty-ps-230705_1688589803900_hpEmbed_sl_3x2.jpg"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "4e6be4dd-27a2-48d5-b1c3-a8b18451a1f3",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                "const body = pm.response.json();",
+                "pm.test('returns real prediction fields', () => { pm.expect(body.label).to.eql('real'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body).to.have.all.keys('label', 'confidence', 'p_ai', 'threshold', 'model_name', 'model_version', 'source_run', 'latency_ms', 'runtime'); });"
+              ],
+              "_lastExecutionId": "52947141-d940-4434-9872-453be3b3c90e"
+            }
+          }
+        ]
+      },
+      {
+        "id": "158cf4d3-1d74-4805-b6c1-7e540e796ba5",
+        "name": "Predict AI image",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "{{apiKey}}"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "daa521c7-eb51-40c1-afd2-34ddea40ce88",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                "const body = pm.response.json();",
+                "pm.test('returns AI prediction fields', () => { pm.expect(body.label).to.eql('ai'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body).to.have.all.keys('label', 'confidence', 'p_ai', 'threshold', 'model_name', 'model_version', 'source_run', 'latency_ms', 'runtime'); });"
+              ],
+              "_lastExecutionId": "b2f06ae4-edc5-4e46-bc8b-7d3a515f500f"
+            }
+          }
+        ]
+      },
+      {
+        "id": "3a73c65b-4116-4b70-9170-4e953d7d94ba",
+        "name": "Predict without key (401)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "95662d94-24af-45a8-94f4-f4270318d0f1",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 401', () => pm.response.to.have.status(401));",
+                "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+              ],
+              "_lastExecutionId": "785b814b-a606-40bb-8d5c-540cf3a719c5"
+            }
+          }
+        ]
+      },
+      {
+        "id": "25b8a246-e9fe-4991-bc80-1fecf84e6c5f",
+        "name": "Predict wrong key (401)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "wrong-key"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "3d56d0e0-ac30-4ff3-b403-1010fa0d67c4",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 401', () => pm.response.to.have.status(401));",
+                "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+              ],
+              "_lastExecutionId": "797fa5df-415d-43bc-a905-8521ef77df9a"
+            }
+          }
+        ]
+      },
+      {
+        "id": "911f8ad9-67ff-49ea-8a8d-d451ba46383a",
+        "name": "Predict TIFF (415)",
+        "request": {
+          "url": {
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "{{apiKey}}"
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "cloud_api/postman/fixtures/unsupported.tiff"
+              }
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "id": "4cfb9cbd-c27e-466d-9e03-60979bf7e093",
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('returns 415', () => pm.response.to.have.status(415));",
+                "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+              ],
+              "_lastExecutionId": "85512c99-688e-436c-bb28-e76bd2592386"
+            }
+          }
+        ]
+      }
+    ],
+    "event": [],
+    "variable": [
+      {
+        "type": "any",
+        "value": "https://23l-0584-a2-ops.vercel.app",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "apiKey"
+      }
+    ],
+    "info": {
+      "_postman_id": "4d4d3faa-72c1-4b4b-a0e5-8d07bff55b04",
+      "name": "VisionGuard cloud API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    }
+  },
+  "environment": {
+    "id": "90a266fc-2277-43d3-884c-32ff984525ee",
+    "values": [
+      {
+        "type": "any",
+        "value": "$MODEL_API_KEY",
+        "key": "apiKey"
+      }
+    ]
+  },
+  "globals": {
+    "id": "8f434a3e-0b62-4d82-9244-b4e54f658eec",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 12,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 6,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 2349.8333333333335,
+      "responseMin": 323,
+      "responseMax": 4903,
+      "responseSd": 1658.8878218720986,
+      "dnsAverage": 0,
+      "dnsMin": 0,
+      "dnsMax": 0,
+      "dnsSd": 0,
+      "firstByteAverage": 0,
+      "firstByteMin": 0,
+      "firstByteMax": 0,
+      "firstByteSd": 0,
+      "started": 1794131260325,
+      "completed": 1794131274624
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 6,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "33cb6911-b0e6-4792-956a-6c85c48ee054",
+          "httpRequestId": "6951b361-a26b-4850-8466-b8935477fcdf"
+        },
+        "item": {
+          "id": "e690bba8-e6e1-4245-ba94-f16f87016e82",
+          "name": "Health",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "70065417-de27-45cf-9df5-dc2a2d67c884",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('returns health metadata', () => { pm.expect(body.status).to.eql('ok'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body.model_version).to.eql('3'); pm.expect(body.img_size).to.eql(224); });"
+                ],
+                "_lastExecutionId": "e3cdb9e9-95e8-46cd-a396-1301075b511c"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "health"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "88553907-3183-423c-bf35-17c0156fd0e4",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET"
+        },
+        "response": {
+          "id": "86b775e3-515b-4b79-b0c4-ea8578023015",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Age",
+              "value": "0"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "174"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:40 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::5q4t8-1794131260748-0c150f3cddf7"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              105,
+              109,
+              103,
+              95,
+              115,
+              105,
+              122,
+              101,
+              34,
+              58,
+              50,
+              50,
+              52,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              50,
+              51,
+              76,
+              45,
+              48,
+              53,
+              56,
+              52,
+              95,
+              65,
+              50,
+              95,
+              79,
+              112,
+              115,
+              95,
+              118,
+              105,
+              115,
+              105,
+              111,
+              110,
+              103,
+              117,
+              97,
+              114,
+              100,
+              34,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              118,
+              101,
+              114,
+              115,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              51,
+              34,
+              44,
+              34,
+              114,
+              117,
+              110,
+              116,
+              105,
+              109,
+              101,
+              34,
+              58,
+              34,
+              116,
+              102,
+              108,
+              105,
+              116,
+              101,
+              34,
+              44,
+              34,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              95,
+              114,
+              117,
+              110,
+              34,
+              58,
+              34,
+              69,
+              53,
+              45,
+              109,
+              111,
+              98,
+              105,
+              108,
+              101,
+              110,
+              101,
+              116,
+              118,
+              50,
+              34,
+              44,
+              34,
+              115,
+              116,
+              97,
+              116,
+              117,
+              115,
+              34,
+              58,
+              34,
+              111,
+              107,
+              34,
+              44,
+              34,
+              116,
+              104,
+              114,
+              101,
+              115,
+              104,
+              111,
+              108,
+              100,
+              34,
+              58,
+              48,
+              46,
+              54,
+              55,
+              50,
+              53,
+              48,
+              48,
+              48,
+              49,
+              52,
+              51,
+              48,
+              53,
+              49,
+              49,
+              52,
+              55,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 657,
+          "responseSize": 174
+        },
+        "id": "e690bba8-e6e1-4245-ba94-f16f87016e82",
+        "assertions": [
+          {
+            "assertion": "returns 200",
+            "skipped": false
+          },
+          {
+            "assertion": "returns health metadata",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "618b3a98-7312-46c0-9002-d9a66a38238f",
+          "length": 6,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "06ff9056-6746-4f04-99a3-7c378a948145"
+        },
+        "item": {
+          "id": "1678d402-4f50-4e45-a8a0-edfdb1ccc24a",
+          "name": "Predict real image",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "data/raw/RealArt/spider-monkey-gty-ps-230705_1688589803900_hpEmbed_sl_3x2.jpg"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4e6be4dd-27a2-48d5-b1c3-a8b18451a1f3",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('returns real prediction fields', () => { pm.expect(body.label).to.eql('real'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body).to.have.all.keys('label', 'confidence', 'p_ai', 'threshold', 'model_name', 'model_version', 'source_run', 'latency_ms', 'runtime'); });"
+                ],
+                "_lastExecutionId": "52947141-d940-4434-9872-453be3b3c90e"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "$MODEL_API_KEY"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "709b5807-4bef-4e33-8180-655efd5c832a",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "1223084",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/RealArt/spider-monkey-gty-ps-230705_1688589803900_hpEmbed_sl_3x2.jpg"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "05a9e9c6-d8ba-4c50-bcac-10fd3fda8ad9",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "251"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:44 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::k77cd-1794131261095-04bfba8997be"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              111,
+              110,
+              102,
+              105,
+              100,
+              101,
+              110,
+              99,
+              101,
+              34,
+              58,
+              48,
+              46,
+              57,
+              52,
+              48,
+              50,
+              53,
+              57,
+              55,
+              54,
+              53,
+              56,
+              51,
+              51,
+              54,
+              49,
+              54,
+              51,
+              44,
+              34,
+              108,
+              97,
+              98,
+              101,
+              108,
+              34,
+              58,
+              34,
+              114,
+              101,
+              97,
+              108,
+              34,
+              44,
+              34,
+              108,
+              97,
+              116,
+              101,
+              110,
+              99,
+              121,
+              95,
+              109,
+              115,
+              34,
+              58,
+              49,
+              49,
+              46,
+              49,
+              48,
+              51,
+              48,
+              55,
+              52,
+              48,
+              48,
+              48,
+              48,
+              48,
+              52,
+              54,
+              53,
+              51,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              50,
+              51,
+              76,
+              45,
+              48,
+              53,
+              56,
+              52,
+              95,
+              65,
+              50,
+              95,
+              79,
+              112,
+              115,
+              95,
+              118,
+              105,
+              115,
+              105,
+              111,
+              110,
+              103,
+              117,
+              97,
+              114,
+              100,
+              34,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              118,
+              101,
+              114,
+              115,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              51,
+              34,
+              44,
+              34,
+              112,
+              95,
+              97,
+              105,
+              34,
+              58,
+              48,
+              46,
+              48,
+              53,
+              57,
+              55,
+              52,
+              48,
+              50,
+              51,
+              52,
+              49,
+              54,
+              54,
+              51,
+              56,
+              51,
+              55,
+              52,
+              44,
+              34,
+              114,
+              117,
+              110,
+              116,
+              105,
+              109,
+              101,
+              34,
+              58,
+              34,
+              116,
+              102,
+              108,
+              105,
+              116,
+              101,
+              34,
+              44,
+              34,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              95,
+              114,
+              117,
+              110,
+              34,
+              58,
+              34,
+              69,
+              53,
+              45,
+              109,
+              111,
+              98,
+              105,
+              108,
+              101,
+              110,
+              101,
+              116,
+              118,
+              50,
+              34,
+              44,
+              34,
+              116,
+              104,
+              114,
+              101,
+              115,
+              104,
+              111,
+              108,
+              100,
+              34,
+              58,
+              48,
+              46,
+              54,
+              55,
+              50,
+              53,
+              48,
+              48,
+              48,
+              49,
+              52,
+              51,
+              48,
+              53,
+              49,
+              49,
+              52,
+              55,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4046,
+          "responseSize": 251
+        },
+        "id": "1678d402-4f50-4e45-a8a0-edfdb1ccc24a",
+        "assertions": [
+          {
+            "assertion": "returns 200",
+            "skipped": false
+          },
+          {
+            "assertion": "returns real prediction fields",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "34a3c534-6c71-4170-947e-832f1b251dc8",
+          "length": 6,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "f5c70060-d223-464b-9fee-250ed7a12df2"
+        },
+        "item": {
+          "id": "158cf4d3-1d74-4805-b6c1-7e540e796ba5",
+          "name": "Predict AI image",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "daa521c7-eb51-40c1-afd2-34ddea40ce88",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 200', () => pm.response.to.have.status(200));",
+                  "const body = pm.response.json();",
+                  "pm.test('returns AI prediction fields', () => { pm.expect(body.label).to.eql('ai'); pm.expect(body.runtime).to.eql('tflite'); pm.expect(body).to.have.all.keys('label', 'confidence', 'p_ai', 'threshold', 'model_name', 'model_version', 'source_run', 'latency_ms', 'runtime'); });"
+                ],
+                "_lastExecutionId": "b2f06ae4-edc5-4e46-bc8b-7d3a515f500f"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "$MODEL_API_KEY"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "62f79d41-b38f-4e7b-a224-dabb06452f03",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "418204",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "e23415fe-12b7-40e1-abd0-5d420d8d9f5f",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "246"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:49 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::xpj4x-1794131265173-d341780caa41"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              99,
+              111,
+              110,
+              102,
+              105,
+              100,
+              101,
+              110,
+              99,
+              101,
+              34,
+              58,
+              48,
+              46,
+              56,
+              53,
+              53,
+              54,
+              50,
+              48,
+              56,
+              48,
+              49,
+              52,
+              52,
+              56,
+              56,
+              50,
+              50,
+              44,
+              34,
+              108,
+              97,
+              98,
+              101,
+              108,
+              34,
+              58,
+              34,
+              97,
+              105,
+              34,
+              44,
+              34,
+              108,
+              97,
+              116,
+              101,
+              110,
+              99,
+              121,
+              95,
+              109,
+              115,
+              34,
+              58,
+              49,
+              49,
+              46,
+              49,
+              50,
+              50,
+              57,
+              57,
+              56,
+              57,
+              57,
+              57,
+              57,
+              57,
+              52,
+              49,
+              51,
+              56,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              110,
+              97,
+              109,
+              101,
+              34,
+              58,
+              34,
+              50,
+              51,
+              76,
+              45,
+              48,
+              53,
+              56,
+              52,
+              95,
+              65,
+              50,
+              95,
+              79,
+              112,
+              115,
+              95,
+              118,
+              105,
+              115,
+              105,
+              111,
+              110,
+              103,
+              117,
+              97,
+              114,
+              100,
+              34,
+              44,
+              34,
+              109,
+              111,
+              100,
+              101,
+              108,
+              95,
+              118,
+              101,
+              114,
+              115,
+              105,
+              111,
+              110,
+              34,
+              58,
+              34,
+              51,
+              34,
+              44,
+              34,
+              112,
+              95,
+              97,
+              105,
+              34,
+              58,
+              48,
+              46,
+              56,
+              53,
+              53,
+              54,
+              50,
+              48,
+              56,
+              48,
+              49,
+              52,
+              52,
+              56,
+              56,
+              50,
+              50,
+              44,
+              34,
+              114,
+              117,
+              110,
+              116,
+              105,
+              109,
+              101,
+              34,
+              58,
+              34,
+              116,
+              102,
+              108,
+              105,
+              116,
+              101,
+              34,
+              44,
+              34,
+              115,
+              111,
+              117,
+              114,
+              99,
+              101,
+              95,
+              114,
+              117,
+              110,
+              34,
+              58,
+              34,
+              69,
+              53,
+              45,
+              109,
+              111,
+              98,
+              105,
+              108,
+              101,
+              110,
+              101,
+              116,
+              118,
+              50,
+              34,
+              44,
+              34,
+              116,
+              104,
+              114,
+              101,
+              115,
+              104,
+              111,
+              108,
+              100,
+              34,
+              58,
+              48,
+              46,
+              54,
+              55,
+              50,
+              53,
+              48,
+              48,
+              48,
+              49,
+              52,
+              51,
+              48,
+              53,
+              49,
+              49,
+              52,
+              55,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4903,
+          "responseSize": 246
+        },
+        "id": "158cf4d3-1d74-4805-b6c1-7e540e796ba5",
+        "assertions": [
+          {
+            "assertion": "returns 200",
+            "skipped": false
+          },
+          {
+            "assertion": "returns AI prediction fields",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "a73466f9-516c-411f-9121-835161cbdf12",
+          "length": 6,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "8f55a025-e732-4a92-ba8f-dec2a8398252"
+        },
+        "item": {
+          "id": "3a73c65b-4116-4b70-9170-4e953d7d94ba",
+          "name": "Predict without key (401)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "95662d94-24af-45a8-94f4-f4270318d0f1",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 401', () => pm.response.to.have.status(401));",
+                  "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+                ],
+                "_lastExecutionId": "785b814b-a606-40bb-8d5c-540cf3a719c5"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "9ec0b5e2-2fdb-4917-94a4-49d90bd783cf",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "418204",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "80a744d5-e815-40fa-8e56-e3d43ae13211",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "26"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:51 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::49rkn-1794131270118-a3ee4cff2653"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              34,
+              85,
+              110,
+              97,
+              117,
+              116,
+              104,
+              111,
+              114,
+              105,
+              122,
+              101,
+              100,
+              46,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 2055,
+          "responseSize": 26
+        },
+        "id": "3a73c65b-4116-4b70-9170-4e953d7d94ba",
+        "assertions": [
+          {
+            "assertion": "returns 401",
+            "skipped": false
+          },
+          {
+            "assertion": "returns JSON error",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "c2a9515c-2e9e-4d0d-9ed8-4fe90f7901d0",
+          "length": 6,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "b2a2308c-0b74-44fe-9aad-3111cd7000eb"
+        },
+        "item": {
+          "id": "25b8a246-e9fe-4991-bc80-1fecf84e6c5f",
+          "name": "Predict wrong key (401)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "wrong-key"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "3d56d0e0-ac30-4ff3-b403-1010fa0d67c4",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 401', () => pm.response.to.have.status(401));",
+                  "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+                ],
+                "_lastExecutionId": "797fa5df-415d-43bc-a905-8521ef77df9a"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "wrong-key"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "449bdfc9-8179-45c4-bdc2-f2df9ec8011e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "418204",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "data/raw/AiArtData/1000_F_551420122_DMVybsWtGw1kS6ogwlk66jcm78PmUIgn.jpg"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "03f9b651-6f47-41fb-8e48-14be447b5b84",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "26"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:54 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::qczg6-1794131272209-7333be1c7511"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              34,
+              85,
+              110,
+              97,
+              117,
+              116,
+              104,
+              111,
+              114,
+              105,
+              122,
+              101,
+              100,
+              46,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 2115,
+          "responseSize": 26
+        },
+        "id": "25b8a246-e9fe-4991-bc80-1fecf84e6c5f",
+        "assertions": [
+          {
+            "assertion": "returns 401",
+            "skipped": false
+          },
+          {
+            "assertion": "returns JSON error",
+            "skipped": false
+          }
+        ]
+      },
+      {
+        "cursor": {
+          "ref": "cb263858-5046-4b5a-a5f6-5fd8b48b9ff4",
+          "length": 6,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "a2c24252-684b-4f5e-bb6a-9bc8ce384605"
+        },
+        "item": {
+          "id": "911f8ad9-67ff-49ea-8a8d-d451ba46383a",
+          "name": "Predict TIFF (415)",
+          "request": {
+            "url": {
+              "path": [
+                "api",
+                "predict"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "X-API-Key",
+                "value": "{{apiKey}}"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": "cloud_api/postman/fixtures/unsupported.tiff"
+                }
+              ]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "4cfb9cbd-c27e-466d-9e03-60979bf7e093",
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('returns 415', () => pm.response.to.have.status(415));",
+                  "pm.test('returns JSON error', () => pm.expect(pm.response.json().error).to.be.a('string'));"
+                ],
+                "_lastExecutionId": "85512c99-688e-436c-bb28-e76bd2592386"
+              }
+            }
+          ]
+        },
+        "request": {
+          "url": {
+            "protocol": "https",
+            "path": [
+              "api",
+              "predict"
+            ],
+            "host": [
+              "23l-0584-a2-ops",
+              "vercel",
+              "app"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "X-API-Key",
+              "value": "$MODEL_API_KEY"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "83dfbda0-918e-44c5-84d8-53fff791cb07",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "23l-0584-a2-ops.vercel.app",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "367",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "formdata",
+            "formdata": [
+              {
+                "key": "image",
+                "type": "file",
+                "src": "cloud_api/postman/fixtures/unsupported.tiff"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "4184232f-f946-48ea-9434-f82e091bb231",
+          "status": "Unsupported Media Type",
+          "code": 415,
+          "header": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "Content-Length",
+              "value": "38"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Date",
+              "value": "Sun, 08 Nov 2026 09:47:54 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "Vercel"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubDomains; preload"
+            },
+            {
+              "key": "X-Vercel-Cache",
+              "value": "MISS"
+            },
+            {
+              "key": "X-Vercel-Id",
+              "value": "bom1::iad1::rnbhg-1794131274323-f0ba7437c81b"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              101,
+              114,
+              114,
+              111,
+              114,
+              34,
+              58,
+              34,
+              85,
+              110,
+              115,
+              117,
+              112,
+              112,
+              111,
+              114,
+              116,
+              101,
+              100,
+              32,
+              105,
+              109,
+              97,
+              103,
+              101,
+              32,
+              102,
+              111,
+              114,
+              109,
+              97,
+              116,
+              46,
+              34,
+              125,
+              10
+            ]
+          },
+          "cookie": [],
+          "responseTime": 323,
+          "responseSize": 38
+        },
+        "id": "911f8ad9-67ff-49ea-8a8d-d451ba46383a",
+        "assertions": [
+          {
+            "assertion": "returns 415",
+            "skipped": false
+          },
+          {
+            "assertion": "returns JSON error",
+            "skipped": false
+          }
+        ]
+      }
+    ],
+    "transfers": {
+      "responseTotal": 761
+    },
+    "failures": [],
+    "error": null
+  }
+}

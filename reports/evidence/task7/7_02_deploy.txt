@@ -1,0 +1,23 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:42:33 PM PKT
+
+$ cd cloud_api && set -a; . ../.env; set +a; npx --yes vercel@latest deploy --prod --yes --token "$VERCEL_TOKEN"
+Vercel CLI 65.12.1
+  Inspect         https://vercel.com/studentpurpose2244-6727s-projects/23l-0584-a2-ops/8PvQVg63S5ruSPWSBrk2RHSH4EKY
+  Production      https://23l-0584-a2-3u5ilql4o-studentpurpose2244-6727s-projects.vercel.app
+▲ Aliased         https://23l-0584-a2-ops.vercel.app
+{
+  "status": "ok",
+  "deployment": {
+    "id": "dpl_8PvQVg63S5ruSPWSBrk2RHSH4EKY",
+    "url": "https://23l-0584-a2-3u5ilql4o-studentpurpose2244-6727s-projects.vercel.app",
+    "productionUrl": "https://23l-0584-a2-ops.vercel.app",
+    "readyState": "READY",
+    "target": "production",
+    "environment": "production",
+    "deploymentProtection": []
+  },
+  "message": "Deployment 23l-0584-a2-3u5ilql4o-studentpurpose2244-6727s-projects.vercel.app ready. Production URL: https://23l-0584-a2-ops.vercel.app"
+}
+
+Deployment Protection initially reported vercel_authentication. It was disabled for production with PATCH /v9/projects/prj_EZGHE6mLfL3TMP1q7BU3VbA74MXJ?ssoProtection=null before this final deployment; the final CLI result reports "deploymentProtection": [].

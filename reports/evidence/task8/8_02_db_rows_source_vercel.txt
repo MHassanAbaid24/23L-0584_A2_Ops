@@ -1,0 +1,28 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:52:39 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec db psql -U visionguard -d visionguard -c "select id, created_at, filename, label, round(confidence::numeric,3) as conf, model_name, model_version, round(latency_ms::numeric) as ms, source from predictions order by id;"
+ id |          created_at           |            filename            | label | conf  |         model_name          | model_version |  ms  | source 
+----+-------------------------------+--------------------------------+-------+-------+-----------------------------+---------------+------+--------
+  1 | 2026-11-08 09:29:57.262638+00 | midjourney20images.jpg         | ai    | 0.998 | 23L-0584_A2_Ops_visionguard | 3             |  391 | local
+  2 | 2026-11-08 09:52:06.660823+00 | whats-world-population-jpg.jpg | real  | 0.996 | 23L-0584_A2_Ops_visionguard | 3             | 1159 | vercel
+  3 | 2026-11-08 09:52:08.541501+00 | midjourney20images.jpg         | ai    | 0.998 | 23L-0584_A2_Ops_visionguard | 3             |  991 | vercel
+  4 | 2026-11-08 09:52:12.437666+00 | cheetah-003.jpg                | real  | 0.801 | 23L-0584_A2_Ops_visionguard | 3             | 1004 | vercel
+  5 | 2026-11-08 09:52:17.071407+00 | images49.jpg                   | ai    | 0.951 | 23L-0584_A2_Ops_visionguard | 3             | 1804 | vercel
+  6 | 2026-11-08 09:52:20.055865+00 | mouse-in-a-maze.jpg            | ai    | 0.685 | 23L-0584_A2_Ops_visionguard | 3             |  792 | vercel
+  7 | 2026-11-08 09:52:24.168615+00 | midjourney-putin.jpg           | real  | 0.924 | 23L-0584_A2_Ops_visionguard | 3             | 1045 | vercel
+(7 rows)
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec db psql -U visionguard -d visionguard -c "select source, count(*), round(avg(latency_ms)::numeric) as avg_ms from predictions group by source;"
+ source | count | avg_ms 
+--------+-------+--------
+ local  |     1 |    391
+ vercel |     6 |   1133
+(2 rows)
+
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose logs --no-log-prefix web 2>&1 | grep -E "prediction id=" | tail -n 6
+2026-11-08 09:52:06,665 INFO visionguard.web: prediction id=2 file=whats-world-population-jpg.jpg label=real conf=0.996 total=5490ms
+2026-11-08 09:52:08,544 INFO visionguard.web: prediction id=3 file=midjourney20images.jpg label=ai conf=0.998 total=1050ms
+2026-11-08 09:52:12,439 INFO visionguard.web: prediction id=4 file=cheetah-003.jpg label=real conf=0.801 total=1043ms
+2026-11-08 09:52:17,073 INFO visionguard.web: prediction id=5 file=images49.jpg label=ai conf=0.951 total=1826ms
+2026-11-08 09:52:20,057 INFO visionguard.web: prediction id=6 file=mouse-in-a-maze.jpg label=ai conf=0.685 total=832ms
+2026-11-08 09:52:24,170 INFO visionguard.web: prediction id=7 file=midjourney-putin.jpg label=real conf=0.924 total=1084ms

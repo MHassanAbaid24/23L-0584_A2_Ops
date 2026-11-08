@@ -36,3 +36,5 @@ mlflow.db
 # report build intermediates
 /report/build/
 /report/*.pdf
+
+/cloud_api/model/

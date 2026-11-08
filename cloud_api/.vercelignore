@@ -1,0 +1,7 @@
+*
+!api
+!api/**
+!model
+!model/**
+!requirements.txt
+!vercel.json

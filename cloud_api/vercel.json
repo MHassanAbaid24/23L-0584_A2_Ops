@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30,
+      "includeFiles": "model/**"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
+    }
+  ]
+}

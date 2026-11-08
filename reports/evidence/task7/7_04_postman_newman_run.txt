@@ -1,0 +1,59 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:48:11 PM PKT
+
+$ npx --yes newman run cloud_api/postman/VisionGuard.postman_collection.json --env-var apiKey=$MODEL_API_KEY --working-dir "$PWD" --reporters cli,json --reporter-json-export reports/evidence/task7/newman_results.json
+newman
+
+VisionGuard cloud API
+
+→ Health
+  GET https://23l-0584-a2-ops.vercel.app/api/health [200 OK, 512B, 657ms]
+  ✓  returns 200
+  ✓  returns health metadata
+
+→ Predict real image
+  POST https://23l-0584-a2-ops.vercel.app/api/predict [200 OK, 581B, 4s]
+  ✓  returns 200
+  ✓  returns real prediction fields
+
+→ Predict AI image
+  POST https://23l-0584-a2-ops.vercel.app/api/predict [200 OK, 576B, 4.9s]
+  ✓  returns 200
+  ✓  returns AI prediction fields
+
+→ Predict without key (401)
+  POST https://23l-0584-a2-ops.vercel.app/api/predict [401 Unauthorized, 365B, 2s]
+  ✓  returns 401
+  ✓  returns JSON error
+
+→ Predict wrong key (401)
+  POST https://23l-0584-a2-ops.vercel.app/api/predict [401 Unauthorized, 365B, 2.1s]
+  ✓  returns 401
+  ✓  returns JSON error
+
+→ Predict TIFF (415)
+  POST https://23l-0584-a2-ops.vercel.app/api/predict [415 Unsupported Media Type, 387B, 323ms]
+  ✓  returns 415
+  ✓  returns JSON error
+
+┌─────────────────────────┬────────────────────┬────────────────────┐
+│                         │           executed │             failed │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              iterations │                  1 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│                requests │                  6 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│            test-scripts │                  6 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│      prerequest-scripts │                  0 │                  0 │
+├─────────────────────────┼────────────────────┼────────────────────┤
+│              assertions │                 12 │                  0 │
+├─────────────────────────┴────────────────────┴────────────────────┤
+│ total run duration: 14.2s                                         │
+├───────────────────────────────────────────────────────────────────┤
+│ total data received: 761B (approx)                                │
+├───────────────────────────────────────────────────────────────────┤
+│ average response time: 2.3s [min: 323ms, max: 4.9s, s.d.: 1658ms] │
+└───────────────────────────────────────────────────────────────────┘
+
+The generated JSON export was checked and its four serialized key values were replaced with $MODEL_API_KEY. The complete scan found neither MODEL_API_KEY nor VERCEL_TOKEN in cloud_api/ or reports/.

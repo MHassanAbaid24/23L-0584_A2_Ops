@@ -1,0 +1,36 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:46:27 PM PKT
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose build web 2>&1 | grep -E '^Step|Using cache|Successfully' | head -n 30
+#11 273.4 Successfully installed Flask-3.1.3 SQLAlchemy-2.1.6 Werkzeug-3.1.9 absl-py-2.5.1 astunparse-1.6.3 blinker-1.9.0 certifi-2026.10.23 charset_normalizer-3.5.2 click-8.5.1 flatbuffers-25.12.19 gast-0.7.0 google_pasta-0.2.0 grpcio-1.85.1 gunicorn-26.2.0 h5py-3.16.0 idna-3.20 itsdangerous-2.2.0 jinja2-3.1.6 keras-3.15.1 libclang-18.1.1 markdown-3.11.3 markdown-it-py-4.2.0 markupsafe-3.0.4 mdurl-0.1.2 ml_dtypes-0.6.0 namex-0.1.0 numpy-2.5.4 opt_einsum-3.4.0 optree-0.20.0 packaging-26.3 pandas-3.0.6 pillow-13.0.0 protobuf-7.36.2 psycopg-3.3.6 psycopg-binary-3.3.6 pygments-2.21.0 python-dateutil-4.0.0 requests-2.34.2 rich-15.0.0 setuptools-84.2.1 six-1.17.0 tensorboard-2.20.0 tensorboard-data-server-0.7.2 tensorflow-cpu-2.20.0 termcolor-3.3.0 typing_extensions-4.16.0 tzdata-2026.6 urllib3-2.8.0 wheel-0.48.0 wrapt-2.5.2
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ INFERENCE_MODE=remote MODEL_API_URL=https://23l-0584-a2-ops.vercel.app docker compose up -d --no-deps web
+ Container vg-23l-0584-web-1  Recreate
+ Container vg-23l-0584-web-1  Recreated
+ Container vg-23l-0584-web-1  Starting
+ Container vg-23l-0584-web-1  Started
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose ps
+NAME                IMAGE                        COMMAND                  SERVICE   CREATED          STATUS                    PORTS
+vg-23l-0584-db-1    postgres:16-alpine           "docker-entrypoint.s…"   db        22 minutes ago   Up 21 minutes (healthy)   5432/tcp
+vg-23l-0584-web-1   23l-0584-a2-ops-web:latest   "gunicorn -c gunicor…"   web       8 seconds ago    Up 6 seconds (healthy)    0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ docker compose exec web env | grep -E '^(INFERENCE_MODE|MODEL_API_URL)='; docker compose exec web sh -c 'test -n "$MODEL_API_KEY" && echo MODEL_API_KEY is set inside the container \(value not shown\)'
+MODEL_API_URL=https://23l-0584-a2-ops.vercel.app
+INFERENCE_MODE=remote
+MODEL_API_KEY is set inside the container (value not shown)
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ curl -s http://localhost:8000/health
+{"api_health":true,"api_url":"https://23l-0584-a2-ops.vercel.app","database":"ok","debug":false,"inference_mode":"remote","model":{"api_url":"https://23l-0584-a2-ops.vercel.app","img_size":224,"load_seconds":0.61,"model_name":"23L-0584_A2_Ops_visionguard","model_version":"3","resize_mode":"stretch","runtime":"tflite","source_run":"E5-mobilenetv2","threshold":0.6725000143051147},"status":"ok"}
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ time docker compose build web 2>&1 | grep -E 'CACHED|DONE [0-9.]+s|naming to' | head -n 12
+#1 DONE 0.0s
+#2 DONE 2.1s
+#3 CACHED
+#4 DONE 0.0s
+#5 DONE 0.0s
+#6 DONE 0.0s
+#7 DONE 0.0s
+#8 CACHED
+#9 CACHED
+#10 CACHED
+#11 CACHED
+#12 CACHED
+
+real	0m2.670s
+user	0m0.230s
+sys	0m0.097s

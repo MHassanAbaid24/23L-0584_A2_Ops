@@ -1,0 +1,48 @@
+muhammad-hassan@muhammad-hassan:~/Study/Semester 7/MLOps/A2/23L-0584_A2_Ops$ date
+Sun 08 Nov 2026 02:35:19 PM PKT
+
+$ curl local API contract cases (X-API-Key: $MODEL_API_KEY)
+## health
+{"img_size":224,"model_name":"E5-mobilenetv2","model_version":"3","runtime":"tflite","source_run":"E5-mobilenetv2","status":"ok","threshold":0.6725000143051147}
+
+HTTP 200
+
+## predict real image
+{"confidence":0.9402597658336163,"label":"real","latency_ms":24.048881999988225,"model_name":"E5-mobilenetv2","model_version":"3","p_ai":0.05974023416638374,"runtime":"tflite","source_run":"E5-mobilenetv2","threshold":0.6725000143051147}
+
+HTTP 200
+
+## predict AI image
+{"confidence":0.855620801448822,"label":"ai","latency_ms":18.549611999333138,"model_name":"E5-mobilenetv2","model_version":"3","p_ai":0.855620801448822,"runtime":"tflite","source_run":"E5-mobilenetv2","threshold":0.6725000143051147}
+
+HTTP 200
+
+## predict without key
+{"error":"Unauthorized."}
+
+HTTP 401
+
+## predict wrong key
+{"error":"Unauthorized."}
+
+HTTP 401
+
+## predict TIFF
+{"error":"Unsupported image format."}
+
+HTTP 415
+
+## predict text as JPEG
+{"error":"Image could not be decoded."}
+
+HTTP 400
+
+## predict image larger than 4 MB
+{"error":"Image exceeds the 4 MB limit."}
+
+HTTP 413
+
+## GET predict (wrong method)
+{"error":"Method not allowed."}
+
+HTTP 405
